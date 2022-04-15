@@ -15,6 +15,9 @@ pub struct DelayTimes {
     pub v_128th: f64,
 }
 
+// Using a state pattern design with `DelayTimes` and `DelayTimesModifier` to make sure the user
+// can't repeatedly call certain functions, like `tripler()`
+
 impl DelayTimes {
     pub fn in_ms(beats_per_minute: f64) -> DelayTimesModifier {
         let ms: f64 = 60_000.0 / beats_per_minute;
