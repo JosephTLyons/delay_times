@@ -17,12 +17,12 @@ pub struct DelayTimes {
 impl DelayTimes {
     pub fn in_ms(beats_per_minute: f64) -> Self {
         let ms: f64 = 60_000.0 / beats_per_minute;
-        DelayTimes::values(ms)
+        DelayTimes::get_instance(ms)
     }
 
     pub fn in_hz(beats_per_minute: f64) -> Self {
         let hz: f64 = beats_per_minute / 60.0;
-        DelayTimes::values(hz)
+        DelayTimes::get_instance(hz)
     }
 
     pub fn dotted(&self) -> Self {
@@ -33,7 +33,7 @@ impl DelayTimes {
         self.multiply_all_values_by(2.0 / 3.0)
     }
 
-    fn values(base_value: f64) -> Self {
+    fn get_instance(base_value: f64) -> Self {
         Self {
             v_whole: base_value * 4.0,
             v_half: base_value * 2.0,
