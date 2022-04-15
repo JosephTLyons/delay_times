@@ -1,6 +1,6 @@
 [package]
 authors = ["Joseph T Lyons <JosephTLyons@gmail.com>"]
-description = "Calculate delay times in milliseconds and hertz"
+description = "Calculate delay times, in milliseconds and in hertz, for a given tempo"
 edition = "2021"
 license = "GPL-3.0-only"
 name = "delay_times"
