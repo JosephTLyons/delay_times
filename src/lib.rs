@@ -14,7 +14,6 @@ pub struct DelayTimes {
     v_128th: f64,
 }
 
-// Maybe there should be different types of data and all have a trait defined for DelayTimes new
 impl DelayTimes {
     pub fn in_ms(beats_per_minute: f64) -> Self {
         let ms: f64 = 60_000.0 / beats_per_minute;
