@@ -51,24 +51,22 @@ pub struct DelayTimesModifier {
 
 impl DelayTimesModifier {
     fn new(delay_times: DelayTimes) -> Self {
-        Self {
-            delay_times: delay_times,
-        }
+        Self { delay_times }
     }
 
-    pub fn normal(self) -> DelayTimes {
-        self.delay_times
+    pub fn normal(&self) -> DelayTimes {
+        self.delay_times.clone()
     }
 
-    pub fn dotted(self) -> DelayTimes {
+    pub fn dotted(&self) -> DelayTimes {
         DelayTimesModifier::multiply_all_values_by(self, 1.5)
     }
 
-    pub fn triplet(self) -> DelayTimes {
+    pub fn triplet(&self) -> DelayTimes {
         DelayTimesModifier::multiply_all_values_by(self, 2.0 / 3.0)
     }
 
-    fn multiply_all_values_by(self, multiplier: f64) -> DelayTimes {
+    fn multiply_all_values_by(&self, multiplier: f64) -> DelayTimes {
         DelayTimes {
             v_whole: self.delay_times.v_whole * multiplier,
             v_half: self.delay_times.v_half * multiplier,
@@ -216,6 +214,24 @@ mod tests {
             let actual_delay_times = DelayTimes::in_hz(120.0).triplet();
 
             assert_delay_times_instances_are_equal(&expected_delay_times, &actual_delay_times)
+        }
+    }
+
+    mod interface_tests {
+        // This is a weird little test that just ensures we don't break the interface of being
+        // able to resuse the initial struct (`DelayTimesModifier`)
+        // It can't "fail," but the code won't compile if something about the inferface changes
+        #[test]
+        fn test_reusability() {
+            use super::DelayTimes;
+
+            let delay_times_modifier = DelayTimes::in_ms(120.0);
+
+            let _delay_times_normal = delay_times_modifier.normal();
+            let _delay_times_dotted = delay_times_modifier.dotted();
+            let _delay_times_triplet = delay_times_modifier.triplet();
+
+            assert!(true)
         }
     }
 }
