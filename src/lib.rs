@@ -4,14 +4,14 @@ extern crate assert_float_eq;
 #[readonly::make]
 #[derive(Debug, PartialEq)]
 pub struct DelayTimes {
-    v_whole: f64,
-    v_half: f64,
-    v_quarter: f64,
-    v_8th: f64,
-    v_16th: f64,
-    v_32nd: f64,
-    v_64th: f64,
-    v_128th: f64,
+    pub v_whole: f64,
+    pub v_half: f64,
+    pub v_quarter: f64,
+    pub v_8th: f64,
+    pub v_16th: f64,
+    pub v_32nd: f64,
+    pub v_64th: f64,
+    pub v_128th: f64,
 }
 
 impl DelayTimes {
