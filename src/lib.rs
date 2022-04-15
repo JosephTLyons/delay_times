@@ -26,7 +26,7 @@ impl DelayTimes {
         DelayTimes::values(hz)
     }
 
-    pub fn dotted(self) -> Self {
+    pub fn dotted(&self) -> Self {
         self.multiply_all_values_by(1.5)
     }
 
