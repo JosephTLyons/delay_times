@@ -217,10 +217,18 @@ mod tests {
         }
     }
 
+    // Here are a couple of weird tests that just ensures we don't break the interface
+    // They can't fail, but at least the code won't compile if something about the inferface changes
     mod interface_tests {
-        // This is a weird little test that just ensures we don't break the interface of being able
-        // to resuse the initial `DelayTimesModifier` struct
-        // It can't fail, but the code won't compile if something about the inferface changes
+        #[test]
+        fn test_single_shot() {
+            use super::DelayTimes;
+
+            let _delay_times = DelayTimes::in_ms(120.0).normal();
+
+            assert!(true)
+        }
+
         #[test]
         fn test_reusability() {
             use super::DelayTimes;
