@@ -218,9 +218,9 @@ mod tests {
     }
 
     mod interface_tests {
-        // This is a weird little test that just ensures we don't break the interface of being
-        // able to resuse the initial struct (`DelayTimesModifier`)
-        // It can't "fail," but the code won't compile if something about the inferface changes
+        // This is a weird little test that just ensures we don't break the interface of being able
+        // to resuse the initial `DelayTimesModifier` struct
+        // It can't fail, but the code won't compile if something about the inferface changes
         #[test]
         fn test_reusability() {
             use super::DelayTimes;
