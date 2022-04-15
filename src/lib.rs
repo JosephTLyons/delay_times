@@ -2,7 +2,6 @@
 extern crate assert_float_eq;
 
 #[readonly::make]
-#[derive(Debug, PartialEq)]
 pub struct DelayTimes {
     pub v_whole: f64,
     pub v_half: f64,
