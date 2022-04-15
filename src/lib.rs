@@ -217,7 +217,7 @@ mod tests {
         }
     }
 
-    // Here are a couple of weird tests that just ensures we don't break the interface
+    // Here are a couple of weird tests that just ensure we don't break the interface
     // They can't fail, but at least the code won't compile if something about the inferface changes
     mod interface_tests {
         #[test]
