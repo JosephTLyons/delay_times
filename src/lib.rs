@@ -197,36 +197,3 @@ mod tests {
         }
     }
 }
-
-// pub trait Adjust {
-//     fn bias(&self, bias_value: f64) -> Self;
-//     fn scale(&self, scale_value: f64) -> Self;
-// }
-
-// impl Adjust for DelayTimes {
-//     fn bias(&self, bias_value: f64) -> Self {
-//         Self {
-//             v_whole: self.v_whole + bias_value,
-//             v_half: self.v_half + bias_value,
-//             v_quarter: self.v_quarter + bias_value,
-//             v_8th: self.v_8th + bias_value,
-//             v_16th: self.v_16th + bias_value,
-//             v_32nd: self.v_32nd + bias_value,
-//             v_64th: self.v_64th + bias_value,
-//             v_128th: self.v_128th + bias_value,
-//         }
-//     }
-
-//     fn scale(&self, scale_value: f64) -> Self {
-//         Self {
-//             v_whole: self.v_whole * scale_value,
-//             v_half: self.v_half * scale_value,
-//             v_quarter: self.v_quarter * scale_value,
-//             v_8th: self.v_8th * scale_value,
-//             v_16th: self.v_16th * scale_value,
-//             v_32nd: self.v_32nd * scale_value,
-//             v_64th: self.v_64th * scale_value,
-//             v_128th: self.v_128th * scale_value,
-//         }
-//     }
-// }
