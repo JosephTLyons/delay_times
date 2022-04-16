@@ -85,18 +85,25 @@ mod tests {
     use crate::DelayTimes;
 
     fn assert_delay_times_instances_are_equal(
-        delay_times_a: &DelayTimes,
-        delay_times_b: &DelayTimes,
+        expected_delay_times: &DelayTimes,
+        actual_delay_times: &DelayTimes,
     ) {
         let tolerance = 0.0001;
-        assert_float_absolute_eq!(delay_times_a.v_whole, delay_times_b.v_whole, tolerance);
-        assert_float_absolute_eq!(delay_times_a.v_half, delay_times_b.v_half, tolerance);
-        assert_float_absolute_eq!(delay_times_a.v_quarter, delay_times_b.v_quarter, tolerance);
-        assert_float_absolute_eq!(delay_times_a.v_8th, delay_times_b.v_8th, tolerance);
-        assert_float_absolute_eq!(delay_times_a.v_16th, delay_times_b.v_16th, tolerance);
-        assert_float_absolute_eq!(delay_times_a.v_32nd, delay_times_b.v_32nd, tolerance);
-        assert_float_absolute_eq!(delay_times_a.v_64th, delay_times_b.v_64th, tolerance);
-        assert_float_absolute_eq!(delay_times_a.v_128th, delay_times_b.v_128th, tolerance);
+
+        let expected_and_actual_values = [
+            (expected_delay_times.v_whole, actual_delay_times.v_whole),
+            (expected_delay_times.v_half, actual_delay_times.v_half),
+            (expected_delay_times.v_quarter, actual_delay_times.v_quarter),
+            (expected_delay_times.v_8th, actual_delay_times.v_8th),
+            (expected_delay_times.v_16th, actual_delay_times.v_16th),
+            (expected_delay_times.v_32nd, actual_delay_times.v_32nd),
+            (expected_delay_times.v_64th, actual_delay_times.v_64th),
+            (expected_delay_times.v_128th, actual_delay_times.v_128th),
+        ];
+
+        for (expected_value, actual_value) in expected_and_actual_values {
+            assert_float_absolute_eq!(expected_value, actual_value, tolerance);
+        }
     }
 
     mod ms_tests {
