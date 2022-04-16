@@ -15,68 +15,70 @@ pub struct DelayTimes {
     pub v_128th: f64,
 }
 
-// Using a state pattern design with `DelayTimes` and `DelayTimesModifier` to make sure the user
-// can't repeatedly call certain functions, like `tripler()`
+// Using a state-pattern version of a builder-pattern design to make sure the user can't repeatedly call certain functions, like `triplet()`
 
 impl DelayTimes {
-    pub fn in_ms(beats_per_minute: f64) -> DelayTimesModifier {
-        let ms: f64 = 60_000.0 / beats_per_minute;
-        let delay_times = DelayTimes::get_instance(ms);
-        DelayTimesModifier::new(delay_times)
+    #[allow(clippy::new_ret_no_self)] // Maybe turn this off and think of a differnt name other than `new`
+    pub fn new(beats_per_minute: f64) -> DelayTimesPeriodicUnit {
+        DelayTimesPeriodicUnit::new(beats_per_minute)
     }
 
-    pub fn in_hz(beats_per_minute: f64) -> DelayTimesModifier {
-        let hz: f64 = beats_per_minute / 60.0;
-        let delay_times = DelayTimes::get_instance(hz);
-        DelayTimesModifier::new(delay_times)
-    }
-
-    fn get_instance(base_value: f64) -> Self {
-        Self {
-            v_whole: base_value * 4.0,
-            v_half: base_value * 2.0,
-            v_quarter: base_value,
-            v_8th: base_value / 2.0,
-            v_16th: base_value / 4.0,
-            v_32nd: base_value / 8.0,
-            v_64th: base_value / 16.0,
-            v_128th: base_value / 32.0,
+    fn get_instance(base_value: f64, multiplier: f64) -> DelayTimes {
+        DelayTimes {
+            v_whole: (base_value * 4.0) * multiplier,
+            v_half: (base_value * 2.0) * multiplier,
+            v_quarter: (base_value) * multiplier,
+            v_8th: (base_value / 2.0) * multiplier,
+            v_16th: (base_value / 4.0) * multiplier,
+            v_32nd: (base_value / 8.0) * multiplier,
+            v_64th: (base_value / 16.0) * multiplier,
+            v_128th: (base_value / 32.0) * multiplier,
         }
     }
 }
 
-pub struct DelayTimesModifier {
-    delay_times: DelayTimes,
+//  TODO: Better name
+pub struct DelayTimesPeriodicUnit {
+    beats_per_minute: f64,
 }
 
-impl DelayTimesModifier {
-    fn new(delay_times: DelayTimes) -> Self {
-        Self { delay_times }
+impl DelayTimesPeriodicUnit {
+    fn new(beats_per_minute: f64) -> Self {
+        Self { beats_per_minute }
+    }
+
+    pub fn in_ms(&self) -> DelayTimesNoteModifier {
+        // TODO: Better name (something like "quarter_note_delay_time_in_ms")
+        let ms: f64 = 60_000.0 / self.beats_per_minute;
+        DelayTimesNoteModifier::new(ms)
+    }
+
+    pub fn in_hz(&self) -> DelayTimesNoteModifier {
+        // TODO: Better name (something like "quarter_note_delay_time_in_hz")
+        let hz: f64 = self.beats_per_minute / 60.0;
+        DelayTimesNoteModifier::new(hz)
+    }
+}
+
+pub struct DelayTimesNoteModifier {
+    base_value: f64, // TODO: Better name
+}
+
+impl DelayTimesNoteModifier {
+    fn new(base_value: f64) -> Self {
+        Self { base_value }
     }
 
     pub fn normal(&self) -> DelayTimes {
-        self.delay_times.clone()
+        DelayTimes::get_instance(self.base_value, 1.0)
     }
 
     pub fn dotted(&self) -> DelayTimes {
-        DelayTimesModifier::multiply_all_values_by(self, 1.5)
+        DelayTimes::get_instance(self.base_value, 1.5)
     }
 
     pub fn triplet(&self) -> DelayTimes {
-        DelayTimesModifier::multiply_all_values_by(self, 2.0 / 3.0)
-    }
-
-    fn multiply_all_values_by(&self, multiplier: f64) -> DelayTimes {
-        DelayTimes {
-            v_whole: self.delay_times.v_whole * multiplier,
-            v_half: self.delay_times.v_half * multiplier,
-            v_quarter: self.delay_times.v_quarter * multiplier,
-            v_8th: self.delay_times.v_8th * multiplier,
-            v_16th: self.delay_times.v_16th * multiplier,
-            v_32nd: self.delay_times.v_32nd * multiplier,
-            v_64th: self.delay_times.v_64th * multiplier,
-            v_128th: self.delay_times.v_128th * multiplier,
-        }
+        DelayTimes::get_instance(self.base_value, 2.0 / 3.0)
     }
 }
 
@@ -84,6 +86,7 @@ impl DelayTimesModifier {
 mod tests {
     use crate::DelayTimes;
 
+    // This function might be able to go away if there's some sort of macro we can put on the struct that makes the structs auto-comparable
     fn assert_delay_times_instances_are_equal(
         expected_delay_times: &DelayTimes,
         actual_delay_times: &DelayTimes,
@@ -123,7 +126,7 @@ mod tests {
                 v_128th: 15.625,
             };
 
-            let actual_delay_times = DelayTimes::in_ms(120.0).normal();
+            let actual_delay_times = DelayTimes::new(120.0).in_ms().normal();
 
             assert_delay_times_instances_are_equal(&expected_delay_times, &actual_delay_times)
         }
@@ -141,7 +144,7 @@ mod tests {
                 v_128th: 23.4375,
             };
 
-            let actual_delay_times = DelayTimes::in_ms(120.0).dotted();
+            let actual_delay_times = DelayTimes::new(120.0).in_ms().dotted();
 
             assert_delay_times_instances_are_equal(&expected_delay_times, &actual_delay_times)
         }
@@ -159,7 +162,7 @@ mod tests {
                 v_128th: 10.4166,
             };
 
-            let actual_delay_times = DelayTimes::in_ms(120.0).triplet();
+            let actual_delay_times = DelayTimes::new(120.0).in_ms().triplet();
 
             assert_delay_times_instances_are_equal(&expected_delay_times, &actual_delay_times)
         }
@@ -182,7 +185,7 @@ mod tests {
                 v_128th: 0.0625,
             };
 
-            let actual_delay_times = DelayTimes::in_hz(120.0).normal();
+            let actual_delay_times = DelayTimes::new(120.0).in_hz().normal();
 
             assert_delay_times_instances_are_equal(&expected_delay_times, &actual_delay_times)
         }
@@ -200,7 +203,7 @@ mod tests {
                 v_128th: 0.0937,
             };
 
-            let actual_delay_times = DelayTimes::in_hz(120.0).dotted();
+            let actual_delay_times = DelayTimes::new(120.0).in_hz().dotted();
 
             assert_delay_times_instances_are_equal(&expected_delay_times, &actual_delay_times)
         }
@@ -218,7 +221,7 @@ mod tests {
                 v_128th: 0.0416,
             };
 
-            let actual_delay_times = DelayTimes::in_hz(120.0).triplet();
+            let actual_delay_times = DelayTimes::new(120.0).in_hz().triplet();
 
             assert_delay_times_instances_are_equal(&expected_delay_times, &actual_delay_times)
         }
@@ -231,7 +234,7 @@ mod tests {
         fn test_single_shot() {
             use super::DelayTimes;
 
-            let _delay_times = DelayTimes::in_ms(120.0).normal();
+            let _delay_times = DelayTimes::new(120.0).in_ms().normal();
 
             assert!(true)
         }
@@ -240,11 +243,15 @@ mod tests {
         fn test_reusability() {
             use super::DelayTimes;
 
-            let delay_times_modifier = DelayTimes::in_ms(120.0);
+            let delay_times_modifier = DelayTimes::new(120.0);
 
-            let _delay_times_normal = delay_times_modifier.normal();
-            let _delay_times_dotted = delay_times_modifier.dotted();
-            let _delay_times_triplet = delay_times_modifier.triplet();
+            let _delay_times_normal = delay_times_modifier.in_ms().normal();
+            let _delay_times_dotted = delay_times_modifier.in_ms().dotted();
+            let _delay_times_triplet = delay_times_modifier.in_ms().triplet();
+
+            let _delay_times_normal = delay_times_modifier.in_hz().normal();
+            let _delay_times_dotted = delay_times_modifier.in_hz().dotted();
+            let _delay_times_triplet = delay_times_modifier.in_hz().triplet();
 
             assert!(true)
         }
