@@ -23,16 +23,16 @@ impl DelayTimes {
         DelayTimesPeriodicUnit::new(beats_per_minute)
     }
 
-    fn get_instance(base_value: f64, multiplier: f64) -> DelayTimes {
+    fn get_instance(quarter_note_delay_value: f64, multiplier: f64) -> DelayTimes {
         DelayTimes {
-            v_whole: (base_value * 4.0) * multiplier,
-            v_half: (base_value * 2.0) * multiplier,
-            v_quarter: (base_value) * multiplier,
-            v_8th: (base_value / 2.0) * multiplier,
-            v_16th: (base_value / 4.0) * multiplier,
-            v_32nd: (base_value / 8.0) * multiplier,
-            v_64th: (base_value / 16.0) * multiplier,
-            v_128th: (base_value / 32.0) * multiplier,
+            v_whole: (quarter_note_delay_value * 4.0) * multiplier,
+            v_half: (quarter_note_delay_value * 2.0) * multiplier,
+            v_quarter: (quarter_note_delay_value) * multiplier,
+            v_8th: (quarter_note_delay_value / 2.0) * multiplier,
+            v_16th: (quarter_note_delay_value / 4.0) * multiplier,
+            v_32nd: (quarter_note_delay_value / 8.0) * multiplier,
+            v_64th: (quarter_note_delay_value / 16.0) * multiplier,
+            v_128th: (quarter_note_delay_value / 32.0) * multiplier,
         }
     }
 }
@@ -48,37 +48,37 @@ impl DelayTimesPeriodicUnit {
     }
 
     pub fn in_ms(&self) -> DelayTimesNoteModifier {
-        // TODO: Better name (something like "quarter_note_delay_time_in_ms")
-        let ms: f64 = 60_000.0 / self.beats_per_minute;
-        DelayTimesNoteModifier::new(ms)
+        let quarter_note_in_ms: f64 = 60_000.0 / self.beats_per_minute;
+        DelayTimesNoteModifier::new(quarter_note_in_ms)
     }
 
     pub fn in_hz(&self) -> DelayTimesNoteModifier {
-        // TODO: Better name (something like "quarter_note_delay_time_in_hz")
-        let hz: f64 = self.beats_per_minute / 60.0;
-        DelayTimesNoteModifier::new(hz)
+        let quarter_note_in_hz: f64 = self.beats_per_minute / 60.0;
+        DelayTimesNoteModifier::new(quarter_note_in_hz)
     }
 }
 
 pub struct DelayTimesNoteModifier {
-    base_value: f64, // TODO: Better name
+    quarter_note_delay_value: f64,
 }
 
 impl DelayTimesNoteModifier {
-    fn new(base_value: f64) -> Self {
-        Self { base_value }
+    fn new(quarter_note_delay_value: f64) -> Self {
+        Self {
+            quarter_note_delay_value,
+        }
     }
 
     pub fn normal(&self) -> DelayTimes {
-        DelayTimes::get_instance(self.base_value, 1.0)
+        DelayTimes::get_instance(self.quarter_note_delay_value, 1.0)
     }
 
     pub fn dotted(&self) -> DelayTimes {
-        DelayTimes::get_instance(self.base_value, 1.5)
+        DelayTimes::get_instance(self.quarter_note_delay_value, 1.5)
     }
 
     pub fn triplet(&self) -> DelayTimes {
-        DelayTimes::get_instance(self.base_value, 2.0 / 3.0)
+        DelayTimes::get_instance(self.quarter_note_delay_value, 2.0 / 3.0)
     }
 }
 
