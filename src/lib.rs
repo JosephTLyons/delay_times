@@ -23,8 +23,8 @@ impl DelayTimes {
         DelayTimesPeriodicUnit::new(beats_per_minute)
     }
 
-    fn get_instance(quarter_note_delay_value: f64, multiplier: f64) -> DelayTimes {
-        DelayTimes {
+    fn get_instance(quarter_note_delay_value: f64, multiplier: f64) -> Self {
+        Self {
             v_whole: (quarter_note_delay_value * 4.0) * multiplier,
             v_half: (quarter_note_delay_value * 2.0) * multiplier,
             v_quarter: (quarter_note_delay_value) * multiplier,
