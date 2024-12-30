@@ -18,7 +18,7 @@ pub struct DelayTimes {
 // Using a state-pattern version of a builder-pattern design to make sure the user can't repeatedly call certain functions, like `triplet()`
 
 impl DelayTimes {
-    #[allow(clippy::new_ret_no_self)] // Maybe turn this off and think of a differnt name other than `new`
+    #[allow(clippy::new_ret_no_self)] // Maybe turn this off and think of a different name other than `new`
     pub fn new(beats_per_minute: f64) -> DelayTimesPeriodicUnit {
         DelayTimesPeriodicUnit::new(beats_per_minute)
     }
@@ -228,7 +228,7 @@ mod tests {
     }
 
     // Here are a couple of weird tests that just ensure we don't break the interface
-    // They can't fail, but at least the code won't compile if something about the inferface changes
+    // They can't fail, but at least the code won't compile if something about the interface changes
     mod interface_tests {
         #[test]
         fn test_single_shot() {
