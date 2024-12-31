@@ -1,17 +1,21 @@
 # CHANGELOG
 
-## April 17, 2022 - v0.2.0
+## v0.2.1 - 2024-12-31
 
-- Changed library interface to be a bit cleaner and more efficient
+- Fixed incorrect calculation of Hz values.
 
-## April 15, 2022 - v0.1.2
+## v0.2.0 - 2022-04-17
 
-- Added some logic to prevent user mistakes
+- Changed library interface to be a bit cleaner and more efficient.
 
-## April 15, 2022 - v0.1.1
+## v0.1.2 - 2022-04-15
 
-- Fixed visibility of struct members
+- Added some logic to prevent user mistakes.
 
-## April 15, 2022 - v0.1.0
+## v0.1.1 - 2022-04-15
 
-- Initial release
+- Fixed visibility of struct members.
+
+## v0.1.0 - 2022-04-15
+
+- Initial release.
